@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useLatest } from '../hooks/useLatest'
+import { useLatest } from '../hooks/Advanced/useLatest'
 export default () => {
   const [cnt, setCount] = useState(0)
   const cntRef = useLatest(cnt)
