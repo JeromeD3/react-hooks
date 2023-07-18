@@ -1,9 +1,10 @@
 import './App.css'
-import UseLatest from './components/useLatest'
+// import UseLatest from './components/useLatest'
+import UseUnmount from './components/useUnmount'
 function App() {
   return (
     <>
-      <UseLatest />
+      <UseUnmount />
     </>
   )
 }
