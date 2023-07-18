@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback,  useState } from 'react'
 import useLockFn from '../hooks/Effect/useLockFn'
 
 function mockApiRequest() {
@@ -16,13 +16,11 @@ export default () => {
   function mock() {
     const res = count + 1
     console.log('大量运输', count + 1)
-    console.log(res);
-    
+
     return res
   }
   const memomock = useCallback(mock, [count])
-  console.log(memomock);
-  
+
   const submit = useLockFn(async () => {
     console.log('开始了')
     await mockApiRequest()
