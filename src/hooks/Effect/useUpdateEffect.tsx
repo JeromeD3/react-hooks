@@ -4,17 +4,15 @@
 import { useRef } from 'react'
 import { useEffect } from 'react'
 export const useUpdateEffect = (effect: any, deps: any) => {
-  const isMounted = useRef(false) 
-  // 这个是为了配合webpack插件 react-refresh 的热更新能力, 可以忽略
-  
+  const isMounted = useRef(false)
+  // 这个是为了配合 热更新
+
   useEffect(() => {
     isMounted.current = true
-  }, []) 
-  
-  
+  }, [])
+
   // 这里才是核心逻辑
   useEffect(() => {
-    
     if (!isMounted.current) {
       isMounted.current = true
     } else {
