@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useUpdateEffect } from '../hooks/Effect/useUpdateEffect'
 
 const UseUpdateEffect = () => {
-  const [state, setState] = useState(false)
+  const [stateCount, setState] = useState(false)
   useUpdateEffect(() => {
     setTimeout(() => {
       setState(true)
@@ -14,9 +14,10 @@ const UseUpdateEffect = () => {
   }, [])
   return (
     <>
-      <h1>{state}</h1>
-      <div>useUpdateEffect</div>
+      <button onClick={() => setState(!stateCount)}>change</button>
+      <h1>{stateCount && <div>useUpdateEffect</div>}</h1>
     </>
   )
 }
+
 export default UseUpdateEffect

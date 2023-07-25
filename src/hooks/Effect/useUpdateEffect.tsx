@@ -8,7 +8,9 @@ export const useUpdateEffect = (effect: any, deps: any) => {
   // 这个是为了配合 热更新
 
   useEffect(() => {
-    isMounted.current = true
+    return () => {
+      isMounted.current = true
+    }
   }, [])
 
   // 这里才是核心逻辑
