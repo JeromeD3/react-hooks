@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { useUpdateEffect } from '../hooks/Effect/useUpdateEffect'
 
 const UseUpdateEffect = () => {
-  const [stateCount, setState] = useState(false)
+  const [count, setCount] = useState(0)
+  const [state, setState] = useState(false)
   useUpdateEffect(() => {
     setTimeout(() => {
       setState(true)
@@ -11,11 +12,15 @@ const UseUpdateEffect = () => {
     return () => {
       console.log('useUpdateEffect unmount')
     }
-  }, [])
+  }, [count])
   return (
     <>
-      <button onClick={() => setState(!stateCount)}>change</button>
-      <h1>{stateCount && <div>useUpdateEffect</div>}</h1>
+      <h1>{count}</h1>
+      <button type="button" onClick={() => setCount((c) => c + 1)}>
+        reRender
+      </button>
+
+      <h1>{state && <div>useUpdateEffect</div>}</h1>
     </>
   )
 }
