@@ -21,7 +21,6 @@ export default function () {
       <button
         type="button"
         onClick={() => {
-          console.log('执行了')
           setCount(count + 1)
         }}
       >
