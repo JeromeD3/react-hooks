@@ -1,5 +1,5 @@
 import { memo, useCallback, useRef, useState } from 'react'
-import useMemoizedFn from '../hooks/Advanced/UseMemoizedFn'
+import useMemoizedFn from '../hooks/Advanced/useMemoizedFn'
 
 export default () => {
   const [count, setCount] = useState(0)
