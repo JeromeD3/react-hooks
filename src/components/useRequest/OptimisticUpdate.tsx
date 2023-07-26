@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import useRequest from '../hooks/useRequest/useRequest'
+import useRequest from '../../hooks/useRequest/useRequest'
 
 function getUsername(pre: any): Promise<string> {
   console.log('getUsername执行了')

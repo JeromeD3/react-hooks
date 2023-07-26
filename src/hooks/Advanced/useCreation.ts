@@ -14,8 +14,6 @@ function depsAreSame(oldDeps: any, deps: any): boolean {
 }
 
 function useCreation<T>(factory: () => T, deps: any) {
-  console.log("执行了");
-  
   const { current } = useRef({
     deps,
     obj: undefined as undefined | T,

@@ -25,9 +25,6 @@ export default class Fetch {
       loading: !options.manual,
       ...initState,
     }
-
-    console.log(this.state);
-    
   }
 
   setState(s: any = {}) {
@@ -48,8 +45,8 @@ export default class Fetch {
   }
 
   async runAsync(...params: any): Promise<any> {
-    console.log("发起了请求");
-    
+    console.log('发起了请求')
+
     this.count += 1
     const currentCount = this.count
 
@@ -144,12 +141,17 @@ export default class Fetch {
   }
 
   cancel() {
+    console.log('取消了请求')
+
     // 通过设置count值来取消请求
     this.count += 1
     this.setState({
       loading: false,
     })
 
+    // console.error('     ??  why not add Custom cancellation method')
+    // 因为取消只能从请求库里面做，所以这里只能通过手动处理
+    // this.options.onCancel?.()
     this.runPluginHandler('onCancel')
   }
 
@@ -163,7 +165,6 @@ export default class Fetch {
     // @ts-ignore
     return this.runAsync(...(this.state.params || []))
   }
-
 
   //  主要用于乐观更新，先更新数据，然后再请求
   mutate(data?: any | ((oldData?: any) => any | undefined)) {
