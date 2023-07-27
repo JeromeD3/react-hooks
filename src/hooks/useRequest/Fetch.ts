@@ -74,10 +74,10 @@ export default class Fetch {
     this.options.onBefore?.(params)
 
     try {
-      // 进行请求
+      //  可以根据插件请求自定义返回值 --> 狸猫换太子
       let { servicePromise } = this.runPluginHandler('onRequest', this.serviceRef.current, params)
-      //   如果有缓存返回缓存
       if (!servicePromise) {
+        // 如果没有的话就直接执行请求
         servicePromise = this.serviceRef.current(...params)
       }
 
@@ -103,6 +103,7 @@ export default class Fetch {
       this.options.onFinally?.(params, res, undefined)
 
       if (currentCount === this.count) {
+        // 做if判断是为了执行插件的时候可以取消
         this.runPluginHandler('onFinally', params, res, undefined)
       }
 

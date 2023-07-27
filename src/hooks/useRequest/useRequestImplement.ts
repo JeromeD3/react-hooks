@@ -32,7 +32,7 @@ function useRequestImplement(
   // 创建实例，只有初始化时才会创建
   const fetchInstance = useCreation(() => {
     // 初始值 ---> 经过插件处理的值
-    const initState = plugins.map((p: any) => p?.onInit?.(fetchOptions)).filter(Boolean)
+    const initState = plugins.map((p: any) => p?.onInit?.(fetchOptions)).filter(Boolean) // 过滤掉空的
     return new Fetch(serviceRef, fetchOptions, update, Object.assign({}, ...initState))
   }, [])
 
