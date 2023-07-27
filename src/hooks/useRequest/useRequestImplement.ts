@@ -13,7 +13,7 @@ function useRequestImplement(
   plugins: any = []
 ) {
   const { manual = false, ...rest } = options
-
+  
   // if (isDev) {
   if (options.defaultParams && !Array.isArray(options.defaultParams)) {
     console.warn(`expected defaultParams is array, got ${typeof options.defaultParams}`)

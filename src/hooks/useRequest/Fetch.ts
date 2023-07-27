@@ -46,7 +46,6 @@ export default class Fetch {
 
   async runAsync(...params: any): Promise<any> {
     console.log('发起了请求')
-
     this.count += 1
     const currentCount = this.count
 
@@ -80,9 +79,11 @@ export default class Fetch {
         // 如果没有的话就直接执行请求
         servicePromise = this.serviceRef.current(...params)
       }
-
+      console.log("开始请求")
+      // 因为这里是异步操作 ，插件如果用到了定时器，会先执行插件的代码
       const res = await servicePromise
-
+      console.log(res)
+   
       // 执行请求
       if (currentCount !== this.count) {
         // prevent run.then when request is canceled
