@@ -1,8 +1,10 @@
 // import useLoadingDelayPlugin from "./plugins/useLoadingDelayPlugin"
 // import usePollingPlugin from "./plugins/usePollingPlugin"
 // import useLoggerPlugin from "./plugins/useLoggerplugin"
-import useAutoRunPlugin from "./plugins/useAutoRunPlugin"
+// import useAutoRunPlugin from "./plugins/useAutoRunPlugin"
 import useRequestImplement from "./useRequestImplement"
+import useRefreshOnWindowFocusPlugin from "./plugins/useRefreshOnWindowFocusPlugin"
+
 
 function useRequest(service: any, options?: any, plugins?: any) {
   return useRequestImplement(service, options, [
@@ -14,9 +16,9 @@ function useRequest(service: any, options?: any, plugins?: any) {
     // useDebouncePlugin,
     // useLoadingDelayPlugin,
     // usePollingPlugin,
-    // useRefreshOnWindowFocusPlugin,
+    useRefreshOnWindowFocusPlugin,
     // useThrottlePlugin,
-    useAutoRunPlugin,
+    // useAutoRunPlugin,
     // useCachePlugin,
     // useRetryPlugin,
   ])
