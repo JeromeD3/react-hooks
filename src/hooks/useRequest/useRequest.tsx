@@ -2,9 +2,11 @@
 // import usePollingPlugin from "./plugins/usePollingPlugin"
 // import useLoggerPlugin from "./plugins/useLoggerplugin"
 // import useAutoRunPlugin from "./plugins/useAutoRunPlugin"
-import useRetryPlugin from "./plugins/useRetryPlugin"
+// import useRetryPlugin from "./plugins/useRetryPlugin"
+import useCachePlugin from "./plugins/useCachePlugin"
 import useRequestImplement from "./useRequestImplement"
 // import useRefreshOnWindowFocusPlugin from "./plugins/useRefreshOnWindowFocusPlugin"
+// import useRetryPlugin from "./plugins/useCachePlugin"
 
 
 function useRequest(service: any, options?: any, plugins?: any) {
@@ -19,8 +21,8 @@ function useRequest(service: any, options?: any, plugins?: any) {
     // useRefreshOnWindowFocusPlugin,
     // useThrottlePlugin,
     // useAutoRunPlugin,
-    // useCachePlugin,
-    useRetryPlugin,
+    useCachePlugin,
+    // useRetryPlugin,
   ])
 }
 
