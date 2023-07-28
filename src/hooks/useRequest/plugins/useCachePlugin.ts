@@ -1,5 +1,8 @@
+import { useRef } from 'react'
 import useCreation from '../../Advanced/useCreation'
 import * as cache from '../utils/cache'
+import * as cachePromise from '../utils/cachePromise'
+import * as cacheSubscribe from '../utils/cacheSubscribe'
 
 const useCachePlugin = (
   fetchInstance: any,
@@ -11,12 +14,17 @@ const useCachePlugin = (
     getCache: customGetCache,
   }: any
 ) => {
+  const unSubscribeRef: any = useRef()
+  const currentPromiseRef = useRef()
+
   const _setCache = (key: any, cachedData: any) => {
     if (customSetCache) {
       customSetCache(cachedData)
     } else {
       cache.setCache(key, cacheTime, cachedData)
     }
+    console.log('trigger')
+    cacheSubscribe.trigger(key, cachedData.data)
   }
 
   const _getCache = (key: any, params?: any) => {
@@ -67,6 +75,30 @@ const useCachePlugin = (
         }
       }
     },
+
+    onRequest: (service: any, args: any) => {
+      console.log('onRequest')
+
+      // 先根据 cacheKey 获取缓存的 promise
+      let servicePromise = cachePromise.getCachePromise(cacheKey)
+      console.log(currentPromiseRef)
+
+      if (servicePromise && servicePromise !== currentPromiseRef.current) {
+        // 说明这是一个新的请求
+        return {
+          servicePromise, // 返回请求结果
+        }
+      }
+
+      servicePromise = service(...args)
+      // 然后保存上一个请求
+      currentPromiseRef.current = servicePromise
+      cachePromise.setCachePromise(cacheKey, servicePromise)
+
+      return {
+        servicePromise, // 返回上一个请求
+      }
+    },
     onSuccess: (data: any, params: any) => {
       // 成功的时候就进行缓存
       if (cacheKey) {
@@ -74,6 +106,15 @@ const useCachePlugin = (
           data,
           params,
           time: new Date().getTime(),
+        })
+
+        // 为什么其他页面数据也会更新呢？
+        // 因为这里将设置数据的函数添加到了订阅列表中
+        // 然而订阅列表又是全局的，当请求成功的时候，触发了订阅列表中的所有函数，这样就实现数据共享了
+        unSubscribeRef.current = cacheSubscribe.subscribe(cacheKey, (d: any) => {
+          fetchInstance.setState({
+            data: d,
+          })
         })
       }
     },

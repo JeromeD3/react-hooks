@@ -11,7 +11,6 @@ function getName(keyword = '') {
       resolve({
         time: new Date().toLocaleTimeString(),
         data: keyword + ++counter,
-      
       })
     }, 2000)
   })
@@ -20,9 +19,9 @@ function getName(keyword = '') {
 function User() {
   const { data, loading, params, run }: any = useRequest(getName, {
     cacheKey: 'time',
-    staleTime: 0, // 每隔5秒更新一次数据
-    setCache: (data: any) => localStorage.setItem('cacheKey', JSON.stringify(data)), // 自定义缓存
-    getCache: () => JSON.parse(localStorage.getItem('cacheKey') || '{}'),
+    // staleTime: 0, // 每隔5秒更新一次数据
+    // setCache: (data: any) => localStorage.setItem('cacheKey', JSON.stringify(data)), // 自定义缓存
+    // getCache: () => JSON.parse(localStorage.getItem('cacheKey') || '{}'),
   })
   const [keyword, setKeyword] = useState(params[0] || '')
   if (!data && loading) {
@@ -39,7 +38,7 @@ function User() {
         >
           获取用户名
         </button>
-        <button onClick={() => clearCache('time')}>清除缓存</button>
+        {/* <button onClick={() => clearCache('time')}>清除缓存</button> */}
       </div>
       <p>后台加载中: {loading ? 'true' : 'false'}</p>
       <p>最近的请求时间: {data?.time}</p>
@@ -57,8 +56,8 @@ function App() {
       {visible && (
         <>
           <User />
-          {/* <hr /> */}
-          {/* <User /> */}
+          <hr />
+          <User />
         </>
       )}
     </div>
