@@ -19,6 +19,7 @@ function getName() {
 function User() {
   const { data, loading }: any = useRequest(getName, {
     cacheKey: 'time',
+    staleTime: 2000,// 每隔5秒更新一次数据
   })
   if (!data && loading) {
     return <p>加载中...</p>

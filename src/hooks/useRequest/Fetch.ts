@@ -65,8 +65,9 @@ export default class Fetch {
       ...state,
     })
 
-    // 返回缓存的数据
+    // 返回缓存的数据，就不用请求了
     if (returnNow) {
+      console.log('还在缓存期间，返回缓存的数据')
       return Promise.resolve(state.data)
     }
 

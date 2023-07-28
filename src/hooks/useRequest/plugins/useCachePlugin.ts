@@ -1,7 +1,6 @@
 import * as cache from '../utils/cache'
 
-
-const useCachePlugin = (fetchInstance: any, { cacheKey }: any) => {
+const useCachePlugin = (fetchInstance: any, { cacheKey, staleTime = 0 }: any) => {
   const _setCache = (key: any, cachedData: any) => {
     cache.setCache(key, cachedData)
   }
@@ -21,8 +20,19 @@ const useCachePlugin = (fetchInstance: any, { cacheKey }: any) => {
       if (!cacheData || !Object.hasOwnProperty.call(cacheData, 'data')) {
         return {}
       }
-      return {
-        data: cacheData?.data,
+   
+      if (staleTime === -1 || new Date().getTime() - cacheData.time <= staleTime) {
+        // 如果在过期时间内
+        return {
+          loading: false,
+          data: cacheData?.data,
+          returnNow: true,
+        }
+      } else {
+        // 返回缓存数据
+        return {
+          data: cacheData?.data,
+        }
       }
     },
     onSuccess: (data: any, params: any) => {
