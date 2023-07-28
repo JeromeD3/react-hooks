@@ -1,3 +1,4 @@
+import useCreation from '../../Advanced/useCreation'
 import * as cache from '../utils/cache'
 
 const useCachePlugin = (fetchInstance: any, { cacheKey, staleTime = 0 }: any) => {
@@ -8,6 +9,21 @@ const useCachePlugin = (fetchInstance: any, { cacheKey, staleTime = 0 }: any) =>
   const _getCache = (key: any) => {
     return cache.getCache(key)
   }
+
+  // 设置空依赖，只会首次执行
+  useCreation(() => {
+    if (!cacheKey) {
+      return
+    }
+    const cacheData = _getCache(cacheKey)
+    if (cacheData && Object.hasOwnProperty.call(cacheData, 'data')) {
+      fetchInstance.state.data = cacheData.data
+      fetchInstance.state.params = cacheData.params
+      if (staleTime === -1 || new Date().getTime() - cacheData.time <= staleTime) {
+        fetchInstance.state.loading = false
+      }
+    }
+  },[])
 
   if (!cacheKey) {
     return {}
@@ -20,7 +36,7 @@ const useCachePlugin = (fetchInstance: any, { cacheKey, staleTime = 0 }: any) =>
       if (!cacheData || !Object.hasOwnProperty.call(cacheData, 'data')) {
         return {}
       }
-   
+
       if (staleTime === -1 || new Date().getTime() - cacheData.time <= staleTime) {
         // 如果在过期时间内
         return {
