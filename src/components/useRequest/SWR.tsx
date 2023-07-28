@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import useRequest from '../../hooks/useRequest/useRequest'
+import useRequest, { clearCache } from '../../hooks/useRequest/useRequest'
 
 /**
  * 先获取缓存的数据，然后再去请求接口，最后再更新数据
@@ -36,6 +36,7 @@ function User() {
         >
           获取用户名
         </button>
+        <button onClick={() => clearCache("time")}>清除缓存</button>
       </div>
       <p>后台加载中: {loading ? 'true' : 'false'}</p>
       <p>最近的请求时间: {data?.time}</p>

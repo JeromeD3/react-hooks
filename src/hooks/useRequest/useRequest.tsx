@@ -27,3 +27,5 @@ function useRequest(service: any, options?: any, plugins?: any) {
 }
 
 export default useRequest
+import { clearCache } from './utils/cache'
+export { clearCache };

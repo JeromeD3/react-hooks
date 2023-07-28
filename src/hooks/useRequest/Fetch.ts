@@ -59,6 +59,7 @@ export default class Fetch {
       return new Promise(() => {})
     }
 
+    // 在before前操作缓存可以控制loading的显示
     this.setState({
       loading: true,
       params,
