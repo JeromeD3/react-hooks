@@ -1,12 +1,28 @@
 import useCreation from '../../Advanced/useCreation'
 import * as cache from '../utils/cache'
 
-const useCachePlugin = (fetchInstance: any, { cacheKey, staleTime = 0 }: any) => {
+const useCachePlugin = (
+  fetchInstance: any,
+  {
+    cacheKey,
+    staleTime = 0,
+    cacheTime = 5 * 60 * 1000, // 默认五分钟
+    setCache: customSetCache,
+    getCache: customGetCache,
+  }: any
+) => {
   const _setCache = (key: any, cachedData: any) => {
-    cache.setCache(key, cachedData)
+    if (customSetCache) {
+      customSetCache(cachedData)
+    } else {
+      cache.setCache(key, cacheTime, cachedData)
+    }
   }
 
-  const _getCache = (key: any) => {
+  const _getCache = (key: any, params?: any) => {
+    if (customGetCache) {
+      return customGetCache(params)
+    }
     return cache.getCache(key)
   }
 
@@ -23,7 +39,7 @@ const useCachePlugin = (fetchInstance: any, { cacheKey, staleTime = 0 }: any) =>
         fetchInstance.state.loading = false
       }
     }
-  },[])
+  }, [])
 
   if (!cacheKey) {
     return {}
