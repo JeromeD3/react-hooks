@@ -9,7 +9,7 @@ const useRefreshOnWindowFocusPlugin = (
 ) => {
   const unsubscribeRef = useRef<any>()
 
-  const stopSubscribe = () => {
+  const stopSubscribe = () => { // 其实这里就只有组件卸载掉时候用到 --> 事件执行后直接挂载到全局
     unsubscribeRef.current?.()
   }
   
