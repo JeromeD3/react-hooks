@@ -2,7 +2,7 @@
 
 const isFunction = (fn: any) => typeof fn === 'function'
 
-export default class Fetch {
+export default class Fetch<TData, TParams extends any[]> {
   pluginImpls: any[] = []
 
   count: number = 0
@@ -14,12 +14,7 @@ export default class Fetch {
     error: undefined,
   }
 
-  constructor(
-    public serviceRef: any,
-    public options: any,
-    public subscribe: any,
-    public initState: any = {}
-  ) {
+  constructor(public serviceRef: any, public options: any, public subscribe: any, public initState: any = {}) {
     this.state = {
       ...this.state,
       loading: !options.manual,
@@ -49,11 +44,7 @@ export default class Fetch {
     this.count += 1
     const currentCount = this.count
 
-    const {
-      stopNow = false,
-      returnNow = false,
-      ...state
-    } = this.runPluginHandler('onBefore', params)
+    const { stopNow = false, returnNow = false, ...state } = this.runPluginHandler('onBefore', params)
     // stop request
     if (stopNow) {
       return new Promise(() => {})
@@ -81,11 +72,11 @@ export default class Fetch {
         // 如果没有的话就直接执行请求
         servicePromise = this.serviceRef.current(...params)
       }
-      console.log("开始请求")
+      console.log('开始请求')
       // 因为这里是异步操作 ，插件如果用到了定时器，会先执行插件的代码
       const res = await servicePromise
       console.log(res)
-   
+
       // 执行请求
       if (currentCount !== this.count) {
         // prevent run.then when request is canceled

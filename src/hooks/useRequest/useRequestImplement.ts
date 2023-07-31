@@ -6,19 +6,17 @@ import useUpdate from '../Effect/useUpdate'
 import useMount from '../LifeCycle/useMount'
 import useUnmount from '../LifeCycle/useUnmount'
 import Fetch from './Fetch'
+import { Options, Service, Plugin, Result } from './types'
+import isDev from './utils/isDev'
 
-function useRequestImplement(
-  service: any, // 获取数据的函数，返回Promise
-  options: any = {},
-  plugins: any = []
-) {
+function useRequestImplement<TData, TParams extends any[]>(service: Service<TData, TParams>, options: Options<TData, TParams> = {}, plugins: Plugin<TData, TParams>[] = []) {
   const { manual = false, ...rest } = options
-  
-  // if (isDev) {
-  if (options.defaultParams && !Array.isArray(options.defaultParams)) {
-    console.warn(`expected defaultParams is array, got ${typeof options.defaultParams}`)
+
+  if (isDev) {
+    if (options.defaultParams && !Array.isArray(options.defaultParams)) {
+      console.warn(`expected defaultParams is array, got ${typeof options.defaultParams}`)
+    }
   }
-  // }
 
   const fetchOptions = {
     manual,
@@ -33,13 +31,12 @@ function useRequestImplement(
   const fetchInstance = useCreation(() => {
     // 初始值 ---> 经过插件处理的值
     const initState = plugins.map((p: any) => p?.onInit?.(fetchOptions)).filter(Boolean) // 过滤掉空的
-    return new Fetch(serviceRef, fetchOptions, update, Object.assign({}, ...initState))
+    return new Fetch<TData, TParams>(serviceRef, fetchOptions, update, Object.assign({}, ...initState))
   }, [])
 
   fetchInstance.options = fetchOptions
   // run all plugins hooks
   fetchInstance.pluginImpls = plugins.map((p: any) => p(fetchInstance, fetchOptions))
-
 
   // 只有初始化时才会执行
   useMount(() => {
@@ -52,7 +49,6 @@ function useRequestImplement(
       fetchInstance.run(...params)
     }
   })
-
 
   // 只有卸载时才会执行
   useUnmount(() => {
@@ -70,7 +66,7 @@ function useRequestImplement(
     run: useMemoizedFn(fetchInstance.run.bind(fetchInstance)),
     runAsync: useMemoizedFn(fetchInstance.runAsync.bind(fetchInstance)),
     mutate: useMemoizedFn(fetchInstance.mutate.bind(fetchInstance)),
-  }
+  } as Result<TData, TParams>
 }
 
 export default useRequestImplement
