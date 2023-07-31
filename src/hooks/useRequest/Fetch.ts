@@ -1,12 +1,10 @@
-/* eslint-disable @typescript-eslint/no-parameter-properties */
-
 import { MutableRefObject } from 'react'
 import { FetchState, Options, PluginReturn, Service, Subscribe } from './types'
 
 const isFunction = (value: unknown): value is (...args: any) => any => typeof value === 'function'
 
 export default class Fetch<TData, TParams extends any[]> {
-  pluginImpls: PluginReturn<TData, TParams>[]
+  pluginImpls: PluginReturn<TData, TParams>[];
 
   count: number = 0
 
