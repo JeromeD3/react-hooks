@@ -1,6 +1,7 @@
 import { DependencyList } from 'react'
 import type Fetch from './Fetch'
 import { CachedData } from './utils/cache'
+export type Subscribe = () => void;
 export type Service<TData, TParams extends any[]> = (...args: TParams) => Promise<TData>
 
 // for Fetch

@@ -1,20 +1,28 @@
 /* eslint-disable @typescript-eslint/no-parameter-properties */
 
-const isFunction = (fn: any) => typeof fn === 'function'
+import { MutableRefObject } from 'react'
+import { FetchState, Options, PluginReturn, Service, Subscribe } from './types'
+
+const isFunction = (value: unknown): value is (...args: any) => any => typeof value === 'function'
 
 export default class Fetch<TData, TParams extends any[]> {
-  pluginImpls: any[] = []
+  pluginImpls: PluginReturn<TData, TParams>[]
 
   count: number = 0
 
-  state = {
+  state: FetchState<TData, TParams> = {
     loading: false,
     params: undefined,
     data: undefined,
     error: undefined,
   }
 
-  constructor(public serviceRef: any, public options: any, public subscribe: any, public initState: any = {}) {
+  constructor(
+    public serviceRef: MutableRefObject<Service<TData, TParams>>,
+    public options: Options<TData, TParams>,
+    public subscribe: Subscribe,
+    public initState: Partial<FetchState<TData, TParams>> = {}
+  ) {
     this.state = {
       ...this.state,
       loading: !options.manual,
@@ -22,7 +30,7 @@ export default class Fetch<TData, TParams extends any[]> {
     }
   }
 
-  setState(s: any = {}) {
+  setState(s: Partial<FetchState<TData, TParams>> = {}) {
     // 新的数据和旧的数据合并
     this.state = {
       ...this.state,
@@ -33,13 +41,13 @@ export default class Fetch<TData, TParams extends any[]> {
   }
 
   // 执行插件，返回真值给到一个对象中
-  runPluginHandler(event: any, ...rest: any[]) {
+  runPluginHandler(event: keyof PluginReturn<TData, TParams>, ...rest: any[]) {
     // @ts-ignore
     const r = this.pluginImpls.map((i) => i[event]?.(...rest)).filter(Boolean)
     return Object.assign({}, ...r)
   }
 
-  async runAsync(...params: any): Promise<any> {
+  async runAsync(...params: TParams): Promise<TData> {
     console.log('发起了请求')
     this.count += 1
     const currentCount = this.count
@@ -83,8 +91,6 @@ export default class Fetch<TData, TParams extends any[]> {
         return new Promise(() => {})
       }
 
-      // const formattedResult = this.options.formatResultRef.current ? this.options.formatResultRef.current(res) : res;
-
       this.setState({
         data: res,
         error: undefined,
@@ -127,7 +133,7 @@ export default class Fetch<TData, TParams extends any[]> {
   }
 
   // 与runAsync的区别就是一个需要自己处理错误，一个不需要
-  run(...params: any) {
+  run(...params: TParams) {
     this.runAsync(...params).catch((error) => {
       if (!this.options.onError) {
         console.error(error)
@@ -162,7 +168,7 @@ export default class Fetch<TData, TParams extends any[]> {
   }
 
   //  主要用于乐观更新，先更新数据，然后再请求
-  mutate(data?: any | ((oldData?: any) => any | undefined)) {
+  mutate(data?: TData | ((oldData?: TData) => TData | undefined)) {
     const targetData = isFunction(data) ? data(this.state.data) : data
     this.runPluginHandler('onMutate', targetData)
     this.setState({
