@@ -5,7 +5,7 @@
 
 import { useRef } from "react"
 // 通过 Object.is 比较依赖数组的值是否相等
-function depsAreSame(oldDeps: any, deps: any): boolean {
+export function depsAreSame(oldDeps: any, deps: any): boolean {
   if (oldDeps === deps) return true
   for (let i = 0; i < oldDeps.length; i++) {
     if (!Object.is(oldDeps[i], deps[i])) return false
