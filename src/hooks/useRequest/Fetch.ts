@@ -81,7 +81,7 @@ export default class Fetch<TData, TParams extends any[]> {
       console.log('开始请求')
       // 因为这里是异步操作 ，插件如果用到了定时器，会先执行插件的代码
       const res = await servicePromise
-      console.log(res)
+      console.log("请求结果：",res)
 
       // 执行请求
       if (currentCount !== this.count) {
@@ -94,10 +94,10 @@ export default class Fetch<TData, TParams extends any[]> {
         error: undefined,
         loading: false,
       })
-
       this.options.onSuccess?.(res, params)
       this.runPluginHandler('onSuccess', res, params)
-
+      console.log("执行成功")
+      
       this.options.onFinally?.(params, res, undefined)
 
       if (currentCount === this.count) {
@@ -132,6 +132,7 @@ export default class Fetch<TData, TParams extends any[]> {
 
   // 与runAsync的区别就是一个需要自己处理错误，一个不需要
   run(...params: TParams) {
+    console.log("执行run")
     this.runAsync(...params).catch((error) => {
       if (!this.options.onError) {
         console.error(error)
