@@ -18,7 +18,6 @@ const createEffectWithTarget = (useEffectType: typeof useEffect | typeof useLayo
     useEffectType(() => {
       const targets = Array.isArray(target) ? target : [target]
       const els = targets.map((item) => getTargetElement(item))
-      console.log('els', els)
       // init run
       if (!hasInitRef.current) {
         hasInitRef.current = true
