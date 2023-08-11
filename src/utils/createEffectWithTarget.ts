@@ -5,6 +5,9 @@ import { getTargetElement } from './domTarget'
 import { depsAreSame } from '../hooks/Advanced/useCreation'
 import useUnmount from '../hooks/LifeCycle/useUnmount'
 
+/**
+ * 每次都会执行
+ */
 const createEffectWithTarget = (useEffectType: typeof useEffect | typeof useLayoutEffect) => {
   // 不传递依赖，状态改变都会执行一次
   const useEffectWithTarget = (effect: EffectCallback, deps: DependencyList, target: BasicTarget<any> | BasicTarget<any>[]) => {
@@ -14,11 +17,12 @@ const createEffectWithTarget = (useEffectType: typeof useEffect | typeof useLayo
     const lastDepsRef = useRef<DependencyList>([])
 
     const unLoadRef = useRef<any>()
-
+    console.log('createEffectWithTarget')
+    // 每次都会执行
     useEffectType(() => {
       const targets = Array.isArray(target) ? target : [target]
       const els = targets.map((item) => getTargetElement(item))
-      // init run
+      // init run , 主要将依赖和元素记录下来，然后执行一遍effect
       if (!hasInitRef.current) {
         hasInitRef.current = true
         lastElementRef.current = els
