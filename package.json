@@ -11,9 +11,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.2.5",
     "@testing-library/react": "^14.0.0",
     "@types/js-cookie": "^3.0.3",
     "@types/lodash": "^4.14.195",
+    "antd": "^5.8.2",
     "js-cookie": "^3.0.5",
     "jsdom": "^22.1.0",
     "lodash": "^4.17.21",
