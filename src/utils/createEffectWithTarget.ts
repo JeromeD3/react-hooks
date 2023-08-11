@@ -35,6 +35,7 @@ const createEffectWithTarget = (useEffectType: typeof useEffect | typeof useLayo
 
       // 中途改变依赖，先卸载之前的effect
       if (els.length !== lastElementRef.current.length || !depsAreSame(els, lastElementRef.current) || !depsAreSame(deps, lastDepsRef.current)) {
+        console.log("中途改变依赖，先卸载之前的effect")
         unLoadRef.current?.()
         console.log(unLoadRef)
         lastElementRef.current = els
