@@ -32,10 +32,20 @@ const createEffectWithTarget = (useEffectType: typeof useEffect | typeof useLayo
         return
       }
 
-
       // 中途改变依赖，先卸载之前的effect
+      console.log('改变依赖第一个条件:', els.length !== lastElementRef.current.length)
+      console.log('改变依赖第2个条件:', !depsAreSame(els, lastElementRef.current))
+      console.log('改变依赖第2个条件:', !depsAreSame(deps, lastDepsRef.current), deps, lastDepsRef.current)
+      // 使用depsAreSame的时候，如果传递的是对象，他们会判断引用的
+      // ## 一些使用心得
+      // useEffect传递的deps数组，因为数组是引用类型，而每次渲染的时候，deps数组都是新的，
+      // 按道理来说应该每次都会执行useEffect的回调函数，但是实际上，useEffect的回调函数只会在deps数组发生变化的时候才会执行，
+      // 这是因为React内部对deps数组进行了浅比较，如果发现deps数组的值和上一次的一样，就不会执行useEffect的回调函数，
+      // 这样做的目的是为了避免不必要的重复执行，提高性能。
+
+      // 所以useEffect的deps，本来是个引用类型，如果里面还有引用类型的话，可以将里面的引用类型用ref来包裹
       if (els.length !== lastElementRef.current.length || !depsAreSame(els, lastElementRef.current) || !depsAreSame(deps, lastDepsRef.current)) {
-        console.log("中途改变依赖，先卸载之前的effect")
+        console.log('中途改变依赖，先卸载之前的effect')
         unLoadRef.current?.()
         console.log(unLoadRef)
         lastElementRef.current = els

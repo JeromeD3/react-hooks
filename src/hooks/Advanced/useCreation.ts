@@ -8,6 +8,8 @@ import { useRef } from "react"
 export function depsAreSame(oldDeps: any, deps: any): boolean {
   if (oldDeps === deps) return true
   for (let i = 0; i < oldDeps.length; i++) {
+    console.log('oldDeps[i]', oldDeps[i])
+    console.log('deps[i]', deps[i])
     if (!Object.is(oldDeps[i], deps[i])) return false
   }
   return true
